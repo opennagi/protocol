@@ -16,7 +16,8 @@
   "type": "module",
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "schema"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -33,11 +34,12 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "gen:schema": "pnpm run build && node scripts/gen-schema.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --max-warnings=0",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run gen:schema"
   },
   "dependencies": {
     "zod": "^4.4.2"

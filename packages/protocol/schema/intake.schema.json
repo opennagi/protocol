@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opennagi.com/schema/intake.schema.json",
+  "title": "IntakeEnvelope",
+  "type": "object",
+  "properties": {
+    "what": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "description": "一目で分かる短い見出し"
+        },
+        "body": {
+          "description": "詳細(任意)",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["title"],
+      "additionalProperties": false
+    },
+    "urgency": {
+      "type": "string",
+      "enum": ["critical", "high", "normal", "low"],
+      "description": "送り手が主張する緊急度。critical / high / normal / low の4段。"
+    },
+    "actionable": {
+      "type": "string",
+      "enum": ["action_required", "fyi"],
+      "description": "行動が要る(action_required)か、単なる報告(fyi)か。"
+    },
+    "expiry": {
+      "description": "いつまで有効か。期限切れは束ねる前に自動で黙殺できる。",
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "送り手の識別子"
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["rss", "webhook", "email", "calendar", "agent"],
+          "description": "送り手の種別。rss / webhook / email / calendar / agent。"
+        }
+      },
+      "required": ["source_id", "kind"],
+      "additionalProperties": false
+    },
+    "dedup_key": {
+      "type": "string",
+      "minLength": 1,
+      "description": "送り手内で一意な識別子。(source_id, dedup_key) で二重取り込みを防ぐ。"
+    },
+    "link": {
+      "description": "元情報に掘るための URL",
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+      "description": "出来事が起きた時刻(送り手基準)"
+    },
+    "recipient": {
+      "type": "string",
+      "minLength": 1,
+      "description": "どの利用者宛か"
+    },
+    "correlation_id": {
+      "description": "同一の事柄に関する複数の更新を束ねるためのキー(任意)",
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "topic": {
+      "description": "送り手が付ける分類ヒント(任意)",
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": ["what", "urgency", "actionable", "source", "dedup_key", "occurred_at", "recipient"],
+  "additionalProperties": false,
+  "description": "OpenNagi 受け口エンベロープ",
+  "examples": [
+    {
+      "source": {
+        "source_id": "src_abc",
+        "kind": "rss"
+      },
+      "dedup_key": "https://example.com/posts/123",
+      "what": {
+        "title": "新しい記事が公開されました",
+        "body": "..."
+      },
+      "urgency": "low",
+      "actionable": "fyi",
+      "expiry": null,
+      "link": "https://example.com/posts/123",
+      "occurred_at": "2026-06-16T08:00:00Z",
+      "recipient": "user_xyz",
+      "correlation_id": null,
+      "topic": "blog"
+    }
+  ]
+}

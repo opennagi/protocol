@@ -58,15 +58,21 @@ const ok = parseIntakeEnvelope(envelope);
 
 未知のフィールドは弾く(strict)。生成される JSON Schema の `additionalProperties: false` と挙動が揃っており、未知キーを含むエンベロープは `/intake` で 422 になる。
 
-## OpenAPI
+## JSON Schema と OpenAPI
 
-`POST /intake` の OpenAPI 3.1 片を `intakeOpenApiFragment()` で得られる。サーバ実装はこれを自分の OpenAPI に合流させる。
+契約は3つの形で取り出せる。
+
+| 取り出し方                     | 用途                                                                     |
+| ------------------------------ | ------------------------------------------------------------------------ |
+| `intakeEnvelopeJsonSchema()`   | エンベロープの JSON Schema(埋め込み用に `$schema` を落とす)。            |
+| `intakeJsonSchemaDocument()`   | `$schema` と `$id` を付けた自己完結版。単体での配布や適合テストに使う。   |
+| `intakeOpenApiFragment()`      | `POST /intake` の OpenAPI 3.1 片。サーバ実装が自分の OpenAPI に合流させる。 |
 
 ```ts
-import { intakeOpenApiFragment } from '@opennagi/protocol';
-
-const fragment = intakeOpenApiFragment();
+import { intakeJsonSchemaDocument, intakeOpenApiFragment } from '@opennagi/protocol';
 ```
+
+`intakeJsonSchemaDocument()` の出力は `schema/intake.schema.json` にも書き出してパッケージに同梱する(`pnpm gen:schema` で再生成)。TypeScript を実行しない実装(例: Go の server)は、このファイルをそのまま取り込んで `/intake` の入力を検証する。
 
 ## 設計の出典
 

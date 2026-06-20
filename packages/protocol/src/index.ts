@@ -33,5 +33,9 @@ export {
   type What,
 } from './envelope.js';
 
-// OpenAPI 片
-export { intakeEnvelopeJsonSchema, intakeOpenApiFragment } from './openapi.js';
+// JSON Schema / OpenAPI 片
+export {
+  intakeEnvelopeJsonSchema,
+  intakeJsonSchemaDocument,
+  intakeOpenApiFragment,
+} from './openapi.js';

@@ -17,6 +17,23 @@ export function intakeEnvelopeJsonSchema(): Record<string, unknown> {
 }
 
 /**
+ * 受け口エンベロープの「自己完結した」JSON Schema ドキュメント。
+ *
+ * `intakeEnvelopeJsonSchema` は埋め込み用に `$schema` を落とすが、こちらは
+ * `$schema` と安定した `$id` を付けた単体配布用。server(Go) は TS を実行できないため、
+ * これを `scripts/gen-schema.mjs` でファイルに吐き、`contract/intake.schema.json` として
+ * 取り込んで適合テストに使う。(build-plan.md Phase 1)
+ */
+export function intakeJsonSchemaDocument(): Record<string, unknown> {
+  return {
+    $schema: 'https://json-schema.org/draft/2020-12/schema',
+    $id: 'https://opennagi.com/schema/intake.schema.json',
+    title: 'IntakeEnvelope',
+    ...intakeEnvelopeJsonSchema(),
+  };
+}
+
+/**
  * `POST /intake` の OpenAPI 3.1 片。
  *
  * これは契約の根であって完全な spec ではない。server の api がこの片を取り込み、
