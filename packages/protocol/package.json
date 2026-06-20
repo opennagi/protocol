@@ -1,0 +1,57 @@
+{
+  "name": "@opennagi/protocol",
+  "version": "0.0.0",
+  "description": "OpenNagi の受け口エンベロープ — AI から人間への通知を、文脈を添えて束ねるためのオープンな契約。",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/opennagi/protocol/tree/main/packages/protocol#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opennagi/protocol.git",
+    "directory": "packages/protocol"
+  },
+  "bugs": {
+    "url": "https://github.com/opennagi/protocol/issues"
+  },
+  "author": "OpenNagi",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings=0",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "zod": "^4.4.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  },
+  "keywords": [
+    "opennagi",
+    "notification",
+    "digest",
+    "envelope",
+    "zod",
+    "openapi"
+  ]
+}

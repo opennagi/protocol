@@ -1,0 +1,31 @@
+{
+  "name": "opennagi-protocol",
+  "private": true,
+  "version": "0.0.0",
+  "description": "OpenNagi の契約層 — 受け口エンベロープと公開 SDK。閉じる層に依存しない根。",
+  "packageManager": "pnpm@10.29.2",
+  "engines": {
+    "node": ">=22.14.0",
+    "pnpm": ">=10.29.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "@types/node": "^22.10.5",
+    "eslint": "^9.18.0",
+    "prettier": "^3.4.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": []
+  }
+}
