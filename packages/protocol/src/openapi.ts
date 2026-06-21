@@ -13,7 +13,13 @@ export function intakeEnvelopeJsonSchema(): Record<string, unknown> {
   >;
   // components.schemas に埋めるので、トップの $schema は落としておく。
   delete schema.$schema;
-  return schema;
+  // 取り込み先（server の contract/intake.schema.json 等）で手編集されないよう、
+  // 生成物である旨を $comment として冒頭に残す（JSON Schema の注釈キーで検証には影響しない）。
+  return {
+    $comment:
+      'GENERATED from @opennagi/protocol (Zod IntakeEnvelopeSchema). Do not edit by hand; edit the protocol source and regenerate.',
+    ...schema,
+  };
 }
 
 /**

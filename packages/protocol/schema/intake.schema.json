@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://opennagi.com/schema/intake.schema.json",
   "title": "IntakeEnvelope",
+  "$comment": "GENERATED from @opennagi/protocol (Zod IntakeEnvelopeSchema). Do not edit by hand; edit the protocol source and regenerate.",
   "type": "object",
   "properties": {
     "what": {
@@ -24,17 +25,27 @@
           ]
         }
       },
-      "required": ["title"],
+      "required": [
+        "title"
+      ],
       "additionalProperties": false
     },
     "urgency": {
       "type": "string",
-      "enum": ["critical", "high", "normal", "low"],
+      "enum": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
       "description": "送り手が主張する緊急度。critical / high / normal / low の4段。"
     },
     "actionable": {
       "type": "string",
-      "enum": ["action_required", "fyi"],
+      "enum": [
+        "action_required",
+        "fyi"
+      ],
       "description": "行動が要る(action_required)か、単なる報告(fyi)か。"
     },
     "expiry": {
@@ -60,11 +71,20 @@
         },
         "kind": {
           "type": "string",
-          "enum": ["rss", "webhook", "email", "calendar", "agent"],
+          "enum": [
+            "rss",
+            "webhook",
+            "email",
+            "calendar",
+            "agent"
+          ],
           "description": "送り手の種別。rss / webhook / email / calendar / agent。"
         }
       },
-      "required": ["source_id", "kind"],
+      "required": [
+        "source_id",
+        "kind"
+      ],
       "additionalProperties": false
     },
     "dedup_key": {
@@ -120,7 +140,15 @@
       ]
     }
   },
-  "required": ["what", "urgency", "actionable", "source", "dedup_key", "occurred_at", "recipient"],
+  "required": [
+    "what",
+    "urgency",
+    "actionable",
+    "source",
+    "dedup_key",
+    "occurred_at",
+    "recipient"
+  ],
   "additionalProperties": false,
   "description": "OpenNagi 受け口エンベロープ",
   "examples": [
