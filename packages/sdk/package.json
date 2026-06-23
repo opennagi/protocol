@@ -1,0 +1,56 @@
+{
+  "name": "@opennagi/sdk",
+  "version": "0.0.0",
+  "description": "OpenNagi の受け口にエンベロープを投げる薄いクライアント。",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/opennagi/protocol/tree/main/packages/sdk#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opennagi/protocol.git",
+    "directory": "packages/sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/opennagi/protocol/issues"
+  },
+  "author": "OpenNagi",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings=0",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "@opennagi/protocol": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  },
+  "keywords": [
+    "opennagi",
+    "notification",
+    "intake",
+    "client",
+    "sdk"
+  ]
+}

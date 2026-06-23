@@ -1,0 +1,57 @@
+{
+  "name": "@opennagi/source-rss",
+  "version": "0.0.0",
+  "description": "RSS / Atom / RDF を OpenNagi の受け口エンベロープに変換する公開リファレンス。",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/opennagi/protocol/tree/main/packages/source-rss#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opennagi/protocol.git",
+    "directory": "packages/source-rss"
+  },
+  "bugs": {
+    "url": "https://github.com/opennagi/protocol/issues"
+  },
+  "author": "OpenNagi",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings=0",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "@opennagi/protocol": "workspace:*",
+    "fast-xml-parser": "^4.5.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  },
+  "keywords": [
+    "opennagi",
+    "rss",
+    "atom",
+    "feed",
+    "envelope"
+  ]
+}
