@@ -62,11 +62,11 @@ const ok = parseIntakeEnvelope(envelope);
 
 契約は3つの形で取り出せる。
 
-| 取り出し方                     | 用途                                                                     |
-| ------------------------------ | ------------------------------------------------------------------------ |
-| `intakeEnvelopeJsonSchema()`   | エンベロープの JSON Schema(埋め込み用に `$schema` を落とす)。            |
-| `intakeJsonSchemaDocument()`   | `$schema` と `$id` を付けた自己完結版。単体での配布や適合テストに使う。   |
-| `intakeOpenApiFragment()`      | `POST /intake` の OpenAPI 3.1 片。サーバ実装が自分の OpenAPI に合流させる。 |
+| 取り出し方                   | 用途                                                                        |
+| ---------------------------- | --------------------------------------------------------------------------- |
+| `intakeEnvelopeJsonSchema()` | エンベロープの JSON Schema(埋め込み用に `$schema` を落とす)。               |
+| `intakeJsonSchemaDocument()` | `$schema` と `$id` を付けた自己完結版。単体での配布や適合テストに使う。     |
+| `intakeOpenApiFragment()`    | `POST /intake` の OpenAPI 3.1 片。サーバ実装が自分の OpenAPI に合流させる。 |
 
 ```ts
 import { intakeJsonSchemaDocument, intakeOpenApiFragment } from '@opennagi/protocol';
