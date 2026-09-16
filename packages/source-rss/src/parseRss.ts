@@ -13,6 +13,8 @@ export type ParsedItem = {
   title: string;
   summary: string | null;
   publishedAt: string | null;
+  /** 記事を代表する画像の URL。media:thumbnail / media:content / enclosure の順で最初の候補。 */
+  imageUrl: string | null;
   raw: unknown;
 };
 
@@ -104,6 +106,7 @@ function parseRss2(channel: Record<string, unknown>): ParsedFeed {
         title: getText(item.title) ?? FALLBACK_TITLE,
         summary: getText(item.description) ?? getText(item['content:encoded']),
         publishedAt: parseDate(pub),
+        imageUrl: extractImageUrl(item),
         raw: node,
       };
     }),
@@ -124,6 +127,7 @@ function parseAtom(feed: Record<string, unknown>): ParsedFeed {
         title: getText(entry.title) ?? FALLBACK_TITLE,
         summary: getText(entry.summary) ?? getText(entry.content),
         publishedAt: parseDate(published),
+        imageUrl: extractImageUrl(entry),
         raw: node,
       };
     }),
@@ -147,6 +151,7 @@ function parseRdf(rdf: Record<string, unknown>): ParsedFeed {
         title: getText(item.title) ?? FALLBACK_TITLE,
         summary: getText(item.description),
         publishedAt: parseDate(date),
+        imageUrl: extractImageUrl(item),
         raw: node,
       };
     }),
@@ -170,6 +175,39 @@ function extractAtomLink(link: unknown): string | null {
     fallback ??= href;
   }
   return fallback;
+}
+
+/**
+ * 項目を代表する画像 URL を、明示的なメタデータの順で 1 つ選ぶ。
+ * media:thumbnail → media:content(画像) → enclosure(画像)。本文 HTML の <img> は見ない。
+ * (server の RSS フェッチャは最後の保険として gofeed が補完する項目の画像も見る)
+ * http/https の絞り込みは呼び出し側(rssToEnvelopes)で行う。
+ */
+function extractImageUrl(item: Record<string, unknown>): string | null {
+  for (const node of ensureArray(item['media:thumbnail'])) {
+    const obj = asObject(node);
+    const url = obj && getAttribute(obj, '@_url');
+    if (url) return url;
+  }
+  for (const node of ensureArray(item['media:content'])) {
+    const obj = asObject(node);
+    if (!obj) continue;
+    const medium = getAttribute(obj, '@_medium');
+    const type = getAttribute(obj, '@_type');
+    if (medium && medium !== 'image') continue;
+    if (type && !type.startsWith('image/')) continue;
+    const url = getAttribute(obj, '@_url');
+    if (url) return url;
+  }
+  for (const node of ensureArray(item.enclosure)) {
+    const obj = asObject(node);
+    if (!obj) continue;
+    const type = getAttribute(obj, '@_type');
+    if (!type?.startsWith('image/')) continue;
+    const url = getAttribute(obj, '@_url');
+    if (url) return url;
+  }
+  return null;
 }
 
 function getText(v: unknown): string | null {

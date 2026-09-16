@@ -50,6 +50,7 @@ export const IntakeEnvelopeSchema = z
       description: '送り手内で一意な識別子。(source_id, dedup_key) で二重取り込みを防ぐ。',
     }),
     link: z.url().nullish().meta({ description: '元情報に掘るための URL' }),
+    image_url: z.url().nullish().meta({ description: '記事を代表する画像の URL(任意)' }),
     occurred_at: z.iso
       .datetime({ offset: true })
       .meta({ description: '出来事が起きた時刻(送り手基準)' }),
@@ -72,6 +73,7 @@ export const IntakeEnvelopeSchema = z
         actionable: 'fyi',
         expiry: null,
         link: 'https://example.com/posts/123',
+        image_url: 'https://example.com/posts/123/cover.jpg',
         occurred_at: '2026-06-16T08:00:00Z',
         recipient: 'user_xyz',
         correlation_id: null,

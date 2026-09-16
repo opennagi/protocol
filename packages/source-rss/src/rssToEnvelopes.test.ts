@@ -53,6 +53,36 @@ describe('rssToEnvelopes', () => {
     expect(() => parseIntakeEnvelope(second)).not.toThrow();
   });
 
+  it('image_url は http/https だけを写し、無ければ省く', async () => {
+    const xml = `<?xml version="1.0"?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>Example</title>
+    <item>
+      <title>画像あり</title>
+      <guid>g-img</guid>
+      <media:thumbnail url="https://example.com/thumb.jpg"/>
+    </item>
+    <item>
+      <title>危険な画像</title>
+      <guid>g-danger</guid>
+      <media:thumbnail url="javascript:alert(1)"/>
+    </item>
+    <item>
+      <title>画像なし</title>
+      <guid>g-none</guid>
+    </item>
+  </channel>
+</rss>`;
+    const [img, danger, none] = await rssToEnvelopes(xml, opts);
+    expect(img!.image_url).toBe('https://example.com/thumb.jpg');
+    expect(danger!.image_url).toBeUndefined();
+    expect(none!.image_url).toBeUndefined();
+    for (const env of [img, danger, none]) {
+      expect(() => parseIntakeEnvelope(env)).not.toThrow();
+    }
+  });
+
   it('相対 URL や javascript: の link は落とし、契約に通す', async () => {
     const xml = `<?xml version="1.0"?>
 <rss version="2.0">

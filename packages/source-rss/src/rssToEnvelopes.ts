@@ -26,6 +26,8 @@ export async function itemToEnvelope(
   // link は http/https の絶対 URL だけ採用する。相対 URL は契約(z.url())を通らず、
   // javascript:/data: は下流の描画で危ういため落とす。dedup_key には生の値を使ってよい。
   const link = safeHttpUrl(item.link);
+  // image_url は <img> に直接渡すため、link と同じく http/https 以外は落とす。
+  const image_url = safeHttpUrl(item.imageUrl);
   return {
     what: item.summary ? { title: item.title, body: item.summary } : { title: item.title },
     urgency: 'low',
@@ -36,6 +38,7 @@ export async function itemToEnvelope(
     occurred_at: item.publishedAt ?? new Date().toISOString(),
     recipient: options.recipient,
     ...(link ? { link } : {}),
+    ...(image_url ? { image_url } : {}),
   };
 }
 

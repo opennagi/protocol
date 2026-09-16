@@ -11,6 +11,7 @@ const validEnvelope = {
   actionable: 'fyi',
   expiry: null,
   link: 'https://example.com/posts/123',
+  image_url: 'https://example.com/posts/123/cover.jpg',
   occurred_at: '2026-06-16T08:00:00Z',
   recipient: 'user_xyz',
   correlation_id: null,
@@ -60,6 +61,11 @@ describe('IntakeEnvelope', () => {
 
   it('URL でない link を弾く', () => {
     const bad = { ...validEnvelope, link: 'not-a-url' };
+    expect(IntakeEnvelopeSchema.safeParse(bad).success).toBe(false);
+  });
+
+  it('URL でない image_url を弾く', () => {
+    const bad = { ...validEnvelope, image_url: 'not-a-url' };
     expect(IntakeEnvelopeSchema.safeParse(bad).success).toBe(false);
   });
 

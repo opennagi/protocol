@@ -85,6 +85,18 @@
         }
       ]
     },
+    "image_url": {
+      "description": "記事を代表する画像の URL(任意)",
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "occurred_at": {
       "type": "string",
       "format": "date-time",
@@ -139,6 +151,7 @@
       "actionable": "fyi",
       "expiry": null,
       "link": "https://example.com/posts/123",
+      "image_url": "https://example.com/posts/123/cover.jpg",
       "occurred_at": "2026-06-16T08:00:00Z",
       "recipient": "user_xyz",
       "correlation_id": null,

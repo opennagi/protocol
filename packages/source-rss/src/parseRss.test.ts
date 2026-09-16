@@ -52,6 +52,42 @@ describe('parseRss', () => {
     expect(item.publishedAt).toBe('2026-06-16T09:00:00.000Z');
   });
 
+  it('画像 URL は media:thumbnail → media:content(画像) → enclosure(画像) の順で採る', () => {
+    const xml = `<?xml version="1.0"?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>T</title>
+    <item>
+      <title>thumbnail 優先</title>
+      <enclosure url="https://example.com/enc.jpg" type="image/jpeg" length="1"/>
+      <media:content url="https://example.com/content.jpg" medium="image"/>
+      <media:thumbnail url="https://example.com/thumb.jpg"/>
+    </item>
+    <item>
+      <title>media:content は動画を飛ばして画像を採る</title>
+      <media:content url="https://example.com/movie.mp4" medium="video"/>
+      <media:content url="https://example.com/still.png" type="image/png"/>
+    </item>
+    <item>
+      <title>enclosure は画像だけ</title>
+      <enclosure url="https://example.com/audio.mp3" type="audio/mpeg" length="1"/>
+      <enclosure url="https://example.com/cover.jpg" type="image/jpeg" length="1"/>
+    </item>
+    <item>
+      <title>本文の img は見ない</title>
+      <description>&lt;img src="https://example.com/inline.jpg"&gt;</description>
+    </item>
+  </channel>
+</rss>`;
+    const urls = parseRss(xml).items.map((i) => i.imageUrl);
+    expect(urls).toEqual([
+      'https://example.com/thumb.jpg',
+      'https://example.com/still.png',
+      'https://example.com/cover.jpg',
+      null,
+    ]);
+  });
+
   it('未知の形式は投げる', () => {
     expect(() => parseRss('<html></html>')).toThrow();
   });
