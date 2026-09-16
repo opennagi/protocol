@@ -2,7 +2,7 @@
 
 RSS / Atom / RDF のフィードを OpenNagi の受け口エンベロープに変換する公開リファレンス。
 
-RSS は OpenNagi にとって「最初の1クライアント」であり、特別な経路ではない。このパッケージは、外部の送り手が自分のフィードを `/intake` に投げるときの手本を示す。OpenNagi の server 自身の取得経路はこれに依存しない。
+RSS は OpenNagi にとって「最初の1クライアント」であり、特別扱いはしない。このパッケージは、外部の送り手が自分のフィードを `/intake` に投げるときの手本を示す。OpenNagi の server 自身の取得処理はこれに依存しない。
 
 ## インストール
 
@@ -12,7 +12,7 @@ npm install @opennagi/source-rss
 
 ## 使い方
 
-フィードの XML 文字列を渡すと、エンベロープの配列が返る。HTTP 取得は呼び出し側で行う。
+フィードの XML 文字列を渡すと、エンベロープの配列が返る。HTTP での取得は呼び出し側で実装する。
 
 ```ts
 import { rssToEnvelopes } from '@opennagi/source-rss';
@@ -45,9 +45,9 @@ for (const envelope of envelopes) {
 
 `source_id` と `recipient` は配備ごとに異なるため、呼び出し側が渡す。
 
-guid も link も無い項目は、タイトルと発行時刻のハッシュを `dedup_key` にする。タイトルが同じで発行時刻も無い項目どうしは鍵が衝突し、片方が重複として扱われることがある。
+guid も link も無い項目は、タイトルと発行時刻のハッシュを `dedup_key` にする。タイトルが同じで発行時刻も無い項目どうしはキーが衝突し、片方が重複として扱われることがある。
 
-`link` は http/https の絶対 URL だけを採用し、相対 URL や `javascript:` などは落とす。
+`link` は http/https の絶対 URL だけを採用し、相対 URL や `javascript:` などは除外する。
 
 ## API
 

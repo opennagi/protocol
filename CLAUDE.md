@@ -4,7 +4,7 @@ Please respond in Japanese.
 
 ## このリポジトリについて
 
-OpenNagi の**契約層**。受け口エンベロープ(送り手が投げる単一の入力)とその公開 SDK を置く。何にも依存しない根であり、サーバやアプリはこの契約に**一方向で**依存する。契約層は閉じる層(server / app)を import してはならない。
+OpenNagi の**契約層**。受け口エンベロープ(送り手が投げる単一の入力)とその公開 SDK を置く。何にも依存しない根であり、サーバやアプリはこの契約に一方向で依存する。契約層は閉じる層(server / app)を import しない。
 
 ## Documentation Guidelines
 
@@ -14,7 +14,7 @@ OpenNagi の**契約層**。受け口エンベロープ(送り手が投げる単
 2. シンプルに記述: 複雑な説明や詳細な背景情報は省略し、要点だけを記載する
 3. 事実のみを記載: 実装の状態や使用方法など、客観的な事実だけを記載する
 4. 時系列的記述の禁止: 変更履歴や「〜を変更しました」といった記述は避ける
-5. `/lint-ja` をかける: ドキュメント(`.md`)を作成または更新したら `/lint-ja` で日本語を整える
+5. 日本語を整える: ドキュメント(`.md`)を作成または更新したら `/lint-ja` をかける
 
 ## Implementation Guidelines
 
@@ -22,7 +22,7 @@ OpenNagi の**契約層**。受け口エンベロープ(送り手が投げる単
 
 1. 最新ドキュメントの確認: WebFetch または Context7 で関連技術の最新ドキュメントを確認する
 2. タスクの計画: TodoWrite で作業を分解し、実装手順を明確にする
-3. 既存コードの調査: 既存の実装パターン(zod スキーマの書き方、テストの並べ方、export の流儀)を理解してから手を入れる
+3. 既存コードの調査: 既存の実装パターン(zod スキーマの書き方、テストの並べ方、export の流儀)を理解してから着手する
 
 ## Simple Implementation Principles
 
@@ -66,11 +66,11 @@ YAGNI(You Aren't Gonna Need It)と KISS(Keep It Simple, Stupid)の原則を徹�
 
 ### パッケージ
 
-| パッケージ             | 公開 | 中身                                                                        |
-| ---------------------- | ---- | --------------------------------------------------------------------------- |
-| `@opennagi/protocol`   | ○    | 受け口エンベロープの zod スキーマと型、`/intake` の JSON Schema・OpenAPI 片 |
-| `@opennagi/sdk`        | ○    | エンベロープを検証して `/intake` に投げる薄いクライアント                   |
-| `@opennagi/source-rss` | ○    | RSS / Atom / RDF をエンベロープに変換する公開リファレンス                   |
+| パッケージ             | 公開 | 中身                                                                          |
+| ---------------------- | ---- | ----------------------------------------------------------------------------- |
+| `@opennagi/protocol`   | ○    | 受け口エンベロープの zod スキーマと型、`/intake` の JSON Schema と OpenAPI 片 |
+| `@opennagi/sdk`        | ○    | エンベロープを検証して `/intake` に投げる薄いクライアント                     |
+| `@opennagi/source-rss` | ○    | RSS / Atom / RDF をエンベロープに変換する公開リファレンス                     |
 
 ### `@opennagi/protocol` の構成
 
@@ -93,16 +93,14 @@ YAGNI(You Aren't Gonna Need It)と KISS(Keep It Simple, Stupid)の原則を徹�
 
 ## MCP 活用
 
-実装前に最新ドキュメントを確認する。
+実装前に Context7 で最新ドキュメントを確認する。
 
 - `mcp__context7__resolve-library-id` でライブラリ検索(例: zod)
 - `mcp__context7__get-library-docs` でドキュメント取得
 
-ドキュメント確認や技術調査の際は Context7 で横断的に調べ、最新のベストプラクティスや推奨パターンを確認する。
-
-## 重要な作業規則
+## 作業規則
 
 - lint と型エラーは即座に修正する: `pnpm lint` は `--max-warnings=0`。コミット前にエラーと警告をゼロに保つ。
 - 整形は Prettier に任せる: 手で整形せず `pnpm format` を使う。設定は `.prettierrc`。
-- 公開 API を変えたら契約変更として扱う: `src/index.ts` の export、スキーマ、OpenAPI 片を変えた場合は README の項目表と整合を取る。README の項目表がこのパッケージが公開する契約の要約として正となる。
+- 公開 API を変えたら契約変更として扱う: `src/index.ts` の export、スキーマ、OpenAPI 片を変えた場合は README の項目表と整合を取る。README の項目表が、このパッケージが公開する契約の要約として正となる。
 - type import を使う: 型のみの import は `import type` / inline `type` を用いる(ESLint の `consistent-type-imports` で強制)。

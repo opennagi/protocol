@@ -6,13 +6,13 @@ OpenNagi の**契約層**。受け口エンベロープ(送り手が投げる単
 
 ## パッケージ
 
-| パッケージ                                    | 公開 | 中身                                                                       |
-| --------------------------------------------- | ---- | -------------------------------------------------------------------------- |
-| [`@opennagi/protocol`](packages/protocol)     | ○    | 受け口エンベロープの Zod スキーマと型、`/intake` の JSON Schema/OpenAPI 片 |
-| [`@opennagi/sdk`](packages/sdk)               | ○    | エンベロープを検証して `/intake` に投げる薄いクライアント                  |
-| [`@opennagi/source-rss`](packages/source-rss) | ○    | RSS / Atom / RDF をエンベロープに変換する公開リファレンス                  |
+| パッケージ                                    | 公開 | 中身                                                                          |
+| --------------------------------------------- | ---- | ----------------------------------------------------------------------------- |
+| [`@opennagi/protocol`](packages/protocol)     | ○    | 受け口エンベロープの Zod スキーマと型、`/intake` の JSON Schema と OpenAPI 片 |
+| [`@opennagi/sdk`](packages/sdk)               | ○    | エンベロープを検証して `/intake` に投げる薄いクライアント                     |
+| [`@opennagi/source-rss`](packages/source-rss) | ○    | RSS / Atom / RDF をエンベロープに変換する公開リファレンス                     |
 
-`sdk` と `source-rss` は外部送り手向けの公開リファレンス。server 自身の RSS 取得はこれに依存せず、Go で自前に取得する。
+`sdk` と `source-rss` は外部送り手向けの公開リファレンス。server 自身の RSS 取得はこれに依存せず、Go で独自に実装する。
 
 ## 開発
 

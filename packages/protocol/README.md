@@ -40,7 +40,7 @@ const ok = parseIntakeEnvelope(envelope);
 | `what`       | 内容。`title`(必須)と `body`(任意)。                             |
 | `urgency`    | 送り手が主張する緊急度。`critical` / `high` / `normal` / `low`。 |
 | `actionable` | 行動が要る(`action_required`)か報告(`fyi`)か。                   |
-| `expiry`     | いつまで有効か(任意)。期限切れは束ねる前に黙殺できる。           |
+| `expiry`     | いつまで有効か(任意)。期限切れは束ねる前に除外できる。           |
 
 ### 経路と同定のメタ
 
@@ -48,7 +48,7 @@ const ok = parseIntakeEnvelope(envelope);
 | ---------------- | --------------------------------------------------------------------------- |
 | `source`         | 送り手。`source_id` と `kind`(`rss`/`webhook`/`email`/`calendar`/`agent`)。 |
 | `dedup_key`      | 送り手内で一意な識別子。`(source_id, dedup_key)` で二重取り込みを防ぐ。     |
-| `link`           | 元情報に掘るための URL(任意)。                                              |
+| `link`           | 元情報をたどるための URL(任意)。                                            |
 | `occurred_at`    | 出来事が起きた時刻(送り手基準)。                                            |
 | `recipient`      | どの利用者宛か。                                                            |
 | `correlation_id` | 同一の事柄に関する複数の更新を束ねるキー(任意)。                            |
@@ -62,11 +62,11 @@ const ok = parseIntakeEnvelope(envelope);
 
 契約は3つの形で取り出せる。
 
-| 取り出し方                   | 用途                                                                        |
-| ---------------------------- | --------------------------------------------------------------------------- |
-| `intakeEnvelopeJsonSchema()` | エンベロープの JSON Schema(埋め込み用に `$schema` を落とす)。               |
-| `intakeJsonSchemaDocument()` | `$schema` と `$id` を付けた自己完結版。単体での配布や適合テストに使う。     |
-| `intakeOpenApiFragment()`    | `POST /intake` の OpenAPI 3.1 片。サーバ実装が自分の OpenAPI に合流させる。 |
+| 取り出し方                   | 用途                                                                      |
+| ---------------------------- | ------------------------------------------------------------------------- |
+| `intakeEnvelopeJsonSchema()` | エンベロープの JSON Schema(埋め込み用に `$schema` を除く)。               |
+| `intakeJsonSchemaDocument()` | `$schema` と `$id` を付けた自己完結版。単体での配布や適合テストに使う。   |
+| `intakeOpenApiFragment()`    | `POST /intake` の OpenAPI 3.1 片。サーバ実装が自分の OpenAPI に取り込む。 |
 
 ```ts
 import { intakeJsonSchemaDocument, intakeOpenApiFragment } from '@opennagi/protocol';
